@@ -23,11 +23,13 @@ describe('AppController (e2e)', () => {
       .expect('Hello World!');
   });
 
-  it('/status-info (GET)', () => {
+  it('/health-check (GET)', () => {
     return request(app.getHttpServer())
-      .get('/status-info')
+      .get('/health-check')
       .expect(200)
-      .expect(`Virus Scanning Service v${version}`);
+      .then((response) => {
+        expect(response.body.status).toBe('ok');
+      });
   });
 
   it('/scan-file (POST) clean', () => {

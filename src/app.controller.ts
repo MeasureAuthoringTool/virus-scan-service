@@ -1,12 +1,13 @@
 import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
+import { VersionNumberService } from './health-check/version-number.service';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(private readonly versionNumberService: VersionNumberService) {}
 
   @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  getMessage(): string {
+    const version = this.versionNumberService.getVersion();
+    return `Virus Scanning Service v${version}`;
   }
 }

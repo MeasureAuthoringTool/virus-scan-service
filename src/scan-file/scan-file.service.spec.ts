@@ -1,3 +1,4 @@
+import { Logger } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { ScanFileService } from './scan-file.service';
 import stubbedMutlerFile from '../../test/stubs/stubbedMutlerFile';
@@ -7,7 +8,7 @@ describe('ScanFileService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [ScanFileService],
+      providers: [Logger, ScanFileService],
     }).compile();
 
     service = module.get<ScanFileService>(ScanFileService);

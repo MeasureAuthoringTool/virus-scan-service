@@ -21,6 +21,8 @@ async function bootstrap() {
     }),
   });
 
+  app.enableShutdownHooks();
+
   const options = new DocumentBuilder()
     .setTitle('Virus Scan Service')
     .setDescription('The Virus Scanning Service API')
