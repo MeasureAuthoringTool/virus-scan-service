@@ -1,41 +1,78 @@
 import { Logger } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { restore as sinonRestore, stub, SinonStub } from 'sinon';
+import { mockResponse } from 'mock-req-res';
 import { ScanFileController } from './scan-file.controller';
 import { ScanFileService } from './scan-file.service';
 import stubbedMutlerFile from '../../test/stubs/stubbedMutlerFile';
-
-jest.mock('./scan-file.service');
-const { ScanFileService: OriginalScanFileService } = jest.requireActual(
-  './scan-file.service',
-);
+import { NodeClamProvider, ScanFileServiceProvider } from '../constants';
+import NodeClam from './clamscan';
+import { ScanResult } from './scan-file.types';
 
 describe('ScanFileController', () => {
-  const mockedScanResult = 'Some virus scanning result from the service';
   let controller: ScanFileController;
-  let mockScanFileFunc: jest.Mock<string, []>;
+  let scanFileStub: SinonStub;
+  let scanResult: ScanResult;
 
   beforeEach(async () => {
-    mockScanFileFunc = jest.fn().mockReturnValue(mockedScanResult);
-    const MockedScanFileService = ScanFileService as jest.Mock<ScanFileService>;
-    MockedScanFileService.mockImplementation(() => {
-      const newService = new OriginalScanFileService(new Logger());
-      newService.scanFile = mockScanFileFunc;
-      return newService;
-    });
+    scanResult = {
+      fileName: 'fileName',
+      infected: false,
+      viruses: [],
+    };
+    scanFileStub = stub(ScanFileService.prototype, 'scanFile');
+    scanFileStub.resolves(scanResult);
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [ScanFileController],
-      providers: [MockedScanFileService, Logger],
+      providers: [
+        {
+          provide: ScanFileServiceProvider,
+          useClass: ScanFileService,
+        },
+        {
+          provide: NodeClamProvider,
+          useClass: NodeClam,
+        },
+        Logger,
+      ],
     }).compile();
 
     controller = module.get<ScanFileController>(ScanFileController);
+  });
+
+  afterEach(() => {
+    sinonRestore();
   });
 
   it('should be defined', () => {
     expect(controller).toBeDefined();
   });
 
-  it('should return the value from the ScanFileService', () => {
-    expect(controller.scanFile(stubbedMutlerFile)).toBe(mockedScanResult);
+  it('should return a 200 for a clean file', async () => {
+    const response = mockResponse();
+    expect(await controller.scanFile(stubbedMutlerFile, response)).toBe(
+      scanResult,
+    );
+    expect(response.status).toHaveBeenCalledWith(200);
+    expect(response.json).toHaveBeenCalledWith({
+      fileName: 'fileName',
+      infected: false,
+      viruses: [],
+    });
+  });
+
+  it('should return a 400 for an infected file', async () => {
+    scanResult.infected = true;
+    const response = mockResponse();
+    expect(await controller.scanFile(stubbedMutlerFile, response)).toBe(
+      scanResult,
+    );
+    expect(response.status).toHaveBeenCalledWith(400);
+    expect(response.json).toHaveBeenCalledWith({
+      fileName: 'fileName',
+      infected: true,
+      viruses: [],
+    });
   });
 });

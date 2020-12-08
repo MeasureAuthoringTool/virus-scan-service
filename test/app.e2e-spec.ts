@@ -20,7 +20,7 @@ describe('AppController (e2e)', () => {
     return request(app.getHttpServer())
       .get('/')
       .expect(200)
-      .expect('Hello World!');
+      .expect(`Virus Scanning Service v${version}`);
   });
 
   it('/health-check (GET)', () => {
@@ -36,7 +36,7 @@ describe('AppController (e2e)', () => {
     return request(app.getHttpServer())
       .post('/scan-file')
       .attach('file', 'test/filesToScan/cleanFile.txt')
-      .expect(201)
-      .expect('No viruses detected in file cleanFile.txt');
+      .expect(200)
+      .expect({ fileName: 'cleanFile.txt', infected: false, viruses: [] });
   });
 });
