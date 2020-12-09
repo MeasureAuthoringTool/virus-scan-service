@@ -1,15 +1,13 @@
 import { Global, Logger, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import * as Joi from 'joi';
-import { AppConfigService } from './app-config.service';
+import { AppConfigService } from './config/config.service';
+import validationSchema from './config/config.validation';
 
 @Global()
 @Module({
   imports: [
     ConfigModule.forRoot({
-      validationSchema: Joi.object({
-        PORT: Joi.number().port(),
-      }),
+      validationSchema: validationSchema,
       isGlobal: true,
     }),
   ],

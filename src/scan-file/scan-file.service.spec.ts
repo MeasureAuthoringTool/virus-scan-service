@@ -1,4 +1,5 @@
 import { Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { restore as sinonRestore, stub, SinonStub } from 'sinon';
 import NodeClam from './clamscan';
@@ -6,6 +7,7 @@ import { ScanFileService } from './scan-file.service';
 import stubbedMutlerFile from '../../test/stubs/stubbedMutlerFile';
 import { NodeClamProvider } from '../constants';
 import ClamException from './ClamException';
+import { ScanFileConfig } from './scan-file.config';
 
 describe('ScanFileService', () => {
   let service: ScanFileService;
@@ -30,6 +32,8 @@ describe('ScanFileService', () => {
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
+        ConfigService,
+        ScanFileConfig,
         ScanFileService,
         Logger,
         {
@@ -56,7 +60,7 @@ describe('ScanFileService', () => {
       expect(initStub).toHaveBeenCalledWith({
         clamdscan: {
           host: '127.0.0.1',
-          port: '3310',
+          port: 3310,
           timeout: 5 * 1000,
         },
       });

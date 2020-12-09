@@ -1,4 +1,5 @@
 import { Logger, ServiceUnavailableException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import {
   HealthCheckResult,
@@ -9,6 +10,7 @@ import { restore as sinonRestore, stub, SinonStub } from 'sinon';
 import { HealthCheckController } from './health-check.controller';
 import { VersionHealthIndicator } from './version.health';
 import { VersionNumberService } from './version-number.service';
+import { HealthCheckConfig } from './health-check.config';
 
 describe('HealthCheckController', () => {
   const versionResult = 'VERSION';
@@ -51,7 +53,13 @@ describe('HealthCheckController', () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [TerminusModule],
       controllers: [HealthCheckController],
-      providers: [Logger, VersionHealthIndicator, VersionNumberService],
+      providers: [
+        Logger,
+        VersionHealthIndicator,
+        VersionNumberService,
+        HealthCheckConfig,
+        ConfigService,
+      ],
     }).compile();
 
     controller = module.get<HealthCheckController>(HealthCheckController);

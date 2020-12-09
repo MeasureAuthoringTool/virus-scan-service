@@ -5,6 +5,7 @@ import { Readable } from 'stream';
 import ClamException from './ClamException';
 import { NodeClamProvider } from '../constants';
 import { ScanResult } from './scan-file.types';
+import { ScanFileConfig } from './scan-file.config';
 
 @Injectable()
 export class ScanFileService {
@@ -13,6 +14,7 @@ export class ScanFileService {
   constructor(
     @Inject(Logger) private readonly logger: Logger,
     @Inject(NodeClamProvider) private nodeClam: NodeClam,
+    @Inject(ScanFileConfig) private config: ScanFileConfig,
   ) {
     logger.setContext(ScanFileService.name);
     this.clamscan = null;
@@ -23,9 +25,9 @@ export class ScanFileService {
       this.logger.log('Initializing ClamAV connection');
       this.clamscan = this.clamscan = await this.nodeClam.init({
         clamdscan: {
-          host: '127.0.0.1',
-          port: '3310',
-          timeout: 5 * 1000, // 5 sec
+          host: this.config.clamAVHost,
+          port: this.config.clamAVPort,
+          timeout: this.config.clamAVTimeout,
         },
       });
       this.logger.log('ClamAV connection successfully initialized');

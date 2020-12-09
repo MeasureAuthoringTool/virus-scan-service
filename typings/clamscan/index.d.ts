@@ -4,7 +4,7 @@ declare module 'clamscan' {
   interface InitOptions {
     clamdscan: {
       host: string;
-      port: string;
+      port: number;
       timeout: number;
     };
   }

@@ -1,4 +1,5 @@
 import { Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { restore as sinonRestore, stub, SinonStub } from 'sinon';
 import { ScanFileController } from './scan-file.controller';
@@ -7,6 +8,7 @@ import stubbedMutlerFile from '../../test/stubs/stubbedMutlerFile';
 import { NodeClamProvider, ScanFileServiceProvider } from '../constants';
 import NodeClam from './clamscan';
 import { ScanResult } from './scan-file.types';
+import { ScanFileConfig } from './scan-file.config';
 
 describe('ScanFileController', () => {
   let controller: ScanFileController;
@@ -33,6 +35,8 @@ describe('ScanFileController', () => {
           provide: NodeClamProvider,
           useClass: NodeClam,
         },
+        ScanFileConfig,
+        ConfigService,
         Logger,
       ],
     }).compile();

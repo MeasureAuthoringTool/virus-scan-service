@@ -6,7 +6,7 @@ import { utilities, WinstonModule } from 'nest-winston';
 import * as winston from 'winston';
 import { AppModule } from './app.module';
 import { version } from '../package.json';
-import { AppConfigService } from './app-config.service';
+import { AppConfigService } from './config/config.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
