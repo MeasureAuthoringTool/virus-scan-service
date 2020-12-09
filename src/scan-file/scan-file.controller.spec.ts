@@ -1,7 +1,6 @@
 import { Logger } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { restore as sinonRestore, stub, SinonStub } from 'sinon';
-import { mockResponse } from 'mock-req-res';
 import { ScanFileController } from './scan-file.controller';
 import { ScanFileService } from './scan-file.service';
 import stubbedMutlerFile from '../../test/stubs/stubbedMutlerFile';
@@ -50,26 +49,20 @@ describe('ScanFileController', () => {
   });
 
   it('should return a 200 for a clean file', async () => {
-    const response = mockResponse();
-    expect(await controller.scanFile(stubbedMutlerFile, response)).toBe(
-      scanResult,
-    );
-    expect(response.status).toHaveBeenCalledWith(200);
-    expect(response.json).toHaveBeenCalledWith({
+    const result = await controller.scanFile(stubbedMutlerFile);
+    expect(result).toBe(scanResult);
+    expect(result).toStrictEqual({
       fileName: 'fileName',
       infected: false,
       viruses: [],
     });
   });
 
-  it('should return a 400 for an infected file', async () => {
+  it('should return infected status for an infected file', async () => {
     scanResult.infected = true;
-    const response = mockResponse();
-    expect(await controller.scanFile(stubbedMutlerFile, response)).toBe(
-      scanResult,
-    );
-    expect(response.status).toHaveBeenCalledWith(400);
-    expect(response.json).toHaveBeenCalledWith({
+    const result = await controller.scanFile(stubbedMutlerFile);
+    expect(result).toBe(scanResult);
+    expect(result).toStrictEqual({
       fileName: 'fileName',
       infected: true,
       viruses: [],
