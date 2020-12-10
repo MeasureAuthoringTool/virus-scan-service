@@ -1,4 +1,5 @@
-import { Logger } from '@nestjs/common';
+import 'jest-extended';
+import { BadRequestException, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { restore as sinonRestore, stub, SinonStub } from 'sinon';
@@ -50,6 +51,28 @@ describe('ScanFileController', () => {
 
   it('should be defined', () => {
     expect(controller).toBeDefined();
+  });
+
+  it('should throw an error if file is missing', async () => {
+    expect.assertions(2);
+    try {
+      await controller.scanFile(undefined);
+    } catch (error) {
+      expect(error).toBeInstanceOf(BadRequestException);
+      expect(error.message).toBe('No file specified for virus scanning');
+    }
+  });
+
+  it('should throw an error if file is empty', async () => {
+    expect.assertions(2);
+    const fileClone = { ...stubbedMutlerFile };
+    fileClone.size = 0;
+    try {
+      await controller.scanFile(fileClone);
+    } catch (error) {
+      expect(error).toBeInstanceOf(BadRequestException);
+      expect(error.message).toBe('No file specified for virus scanning');
+    }
   });
 
   it('should return a 200 for a clean file', async () => {
