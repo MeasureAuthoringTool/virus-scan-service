@@ -35,8 +35,17 @@ describe('AppController (e2e)', () => {
   it('/scan-file (POST) clean', () => {
     return request(app.getHttpServer())
       .post('/scan-file')
+      .set('api_key', '1234567')
       .attach('file', 'test/filesToScan/cleanFile.txt')
       .expect(200)
       .expect({ fileName: 'cleanFile.txt', infected: false, viruses: [] });
+  });
+
+  it('/scan-file unauthorized', () => {
+    return request(app.getHttpServer())
+      .post('/scan-file')
+      .attach('file', 'test/filesToScan/cleanFile.txt')
+      .expect(401)
+      .expect({ statusCode: 401, message: 'Unauthorized' });
   });
 });

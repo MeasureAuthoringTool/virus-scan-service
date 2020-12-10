@@ -2,6 +2,7 @@ import * as Joi from 'joi';
 
 const validationSchema = Joi.object({
   PORT: Joi.number().port(),
+  API_KEY: Joi.string(),
   CLAMAV_HOST: [Joi.string().ip(), Joi.string().hostname()],
   CLAMAV_PORT: Joi.number().port(),
   CLAMAV_TIMEOUT: Joi.number().positive().integer(),

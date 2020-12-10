@@ -5,6 +5,7 @@ import {
   HttpStatus,
   Inject,
   Post,
+  UseGuards,
   UseInterceptors,
   UploadedFile,
 } from '@nestjs/common';
@@ -14,6 +15,7 @@ import * as multer from 'multer';
 import { ScanFileService } from './scan-file.service';
 import { ScanFileServiceProvider } from '../constants';
 import { ScanResult } from './scan-file.types';
+import { ApiKeyGuard } from '../auth/api-key.guard';
 
 @Controller('scan-file')
 export class ScanFileController {
@@ -23,6 +25,7 @@ export class ScanFileController {
 
   @Post()
   @HttpCode(HttpStatus.OK)
+  @UseGuards(ApiKeyGuard)
   @UseInterceptors(FileInterceptor('file', { storage: multer.memoryStorage() }))
   async scanFile(
     @UploadedFile() file?: Express.Multer.File,

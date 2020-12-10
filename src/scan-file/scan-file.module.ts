@@ -4,8 +4,10 @@ import { ScanFileService } from './scan-file.service';
 import { ScanFileServiceProvider, NodeClamProvider } from '../constants';
 import NodeClam from './clamscan';
 import { ScanFileConfig } from './scan-file.config';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
+  imports: [AuthModule],
   controllers: [ScanFileController],
   providers: [
     ScanFileConfig,

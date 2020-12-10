@@ -38,6 +38,11 @@ describe('environment config validation schema', () => {
     expectValidObject({ PORT: 3000 });
   });
 
+  it('should enforce API_KEY validation', () => {
+    expectInvalidObject({ API_KEY: -10 });
+    expectValidObject({ API_KEY: 'somestring' });
+  });
+
   it('should enforce CLAMAV_HOST validation', () => {
     expectInvalidObject({ CLAMAV_HOST: -10 });
     expectValidObject({ CLAMAV_HOST: 'localhost' });

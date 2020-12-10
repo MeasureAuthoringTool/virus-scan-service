@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ConfigService } from '@nestjs/config';
 import { restore as sinonRestore, stub, SinonStub } from 'sinon';
 import { AppConfigService } from './config.service';
-import { DEFAULT_PORT } from '../constants';
+import { DEFAULT_API_KEY, DEFAULT_PORT } from '../constants';
 
 describe('AppConfigService', () => {
   let appConfigService: AppConfigService;
@@ -32,6 +32,18 @@ describe('AppConfigService', () => {
       it('should return the default PORT value when PORT not specified', () => {
         getStub.withArgs('PORT').returns(undefined);
         expect(appConfigService.portNumber).toBe(DEFAULT_PORT);
+      });
+    });
+
+    describe('#get apiKey()', () => {
+      it('should return the API_KEY config value', () => {
+        getStub.withArgs('API_KEY').returns('some key');
+        expect(appConfigService.apiKey).toBe('some key');
+      });
+
+      it('should return the default API_KEY config value not specified', () => {
+        getStub.withArgs('API_KEY').returns(undefined);
+        expect(appConfigService.apiKey).toBe(DEFAULT_API_KEY);
       });
     });
   });

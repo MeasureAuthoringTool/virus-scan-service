@@ -23,6 +23,8 @@ async function bootstrap() {
     }),
   });
 
+  app.use(helmet());
+
   app.enableShutdownHooks();
 
   const logger = app.get(Logger);
@@ -36,8 +38,6 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api', app, document);
-
-  app.use(helmet());
 
   const portNumber = configService.portNumber;
   await app.listen(portNumber);
