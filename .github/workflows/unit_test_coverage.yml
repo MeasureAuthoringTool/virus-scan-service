@@ -20,6 +20,11 @@ jobs:
     name: Checkout, install, lint, build and test with coverage
     runs-on: ubuntu-latest
 
+    services:
+      clamav:
+        image: mkodockx/docker-clamav
+        ports: 3310:3310
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
