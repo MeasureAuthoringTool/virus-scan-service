@@ -23,7 +23,8 @@ jobs:
     services:
       clamav:
         image: mkodockx/docker-clamav
-        ports: 3310:3310
+        ports:
+          - 3310:3310
 
     steps:
       - name: Checkout repository
