@@ -36,7 +36,7 @@ describe('ApiKeyStrategy', () => {
     it('should authenticate successfully when api_key is correct', () => {
       const req = mockRequest({
         headers: {
-          api_key: DEFAULT_API_KEY,
+          apiKey: DEFAULT_API_KEY,
         },
       });
       strategy.authenticate(req);
@@ -47,7 +47,7 @@ describe('ApiKeyStrategy', () => {
     it('should fail authentication when api_key is incorrect', () => {
       const req = mockRequest({
         headers: {
-          api_key: 'totally not valid',
+          apiKey: 'totally not valid',
         },
       });
       strategy.authenticate(req);
@@ -59,7 +59,7 @@ describe('ApiKeyStrategy', () => {
       expect(failArgs[1]).toBeNull();
     });
 
-    it('should fail authentication when api_key is missing', () => {
+    it('should fail authentication when apiKey is missing', () => {
       const req = mockRequest({
         headers: {},
       });

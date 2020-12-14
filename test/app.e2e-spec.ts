@@ -35,7 +35,7 @@ describe('AppController (e2e)', () => {
   it('/scan-file (POST) clean', () => {
     return request(app.getHttpServer())
       .post('/scan-file')
-      .set('api_key', '1234567')
+      .set('apiKey', '1234567')
       .attach('file', 'test/filesToScan/cleanFile.txt')
       .expect(200)
       .expect({ fileName: 'cleanFile.txt', infected: false, viruses: [] });
