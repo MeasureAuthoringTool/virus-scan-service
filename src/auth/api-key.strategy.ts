@@ -15,7 +15,7 @@ export class ApiKeyStrategy extends PassportStrategy(
     @Inject(AppConfigService) private configService: AppConfigService,
   ) {
     super(
-      { header: 'apiKey', prefix: '' },
+      { header: 'apikey', prefix: '' },
       false,
       (apiKey: string, verified: VerifiedType) => {
         if (apiKey === configService.apiKey) {
