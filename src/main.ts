@@ -1,10 +1,34 @@
 import { NestFactory } from '@nestjs/core';
+import { Logger } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import * as helmet from 'helmet';
+import { utilities, WinstonModule } from 'nest-winston';
+import * as winston from 'winston';
 import { AppModule } from './app.module';
 import { version } from '../package.json';
+import { AppConfigService } from './config/config.service';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    logger: WinstonModule.createLogger({
+      // Winston configuration
+      transports: [
+        new winston.transports.Console({
+          format: winston.format.combine(
+            winston.format.timestamp(),
+            utilities.format.nestLike(),
+          ),
+        }),
+      ],
+    }),
+  });
+
+  app.use(helmet());
+
+  app.enableShutdownHooks();
+
+  const logger = app.get(Logger);
+  const configService = app.get(AppConfigService);
 
   const options = new DocumentBuilder()
     .setTitle('Virus Scan Service')
@@ -15,6 +39,8 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api', app, document);
 
-  await app.listen(3000);
+  const portNumber = configService.portNumber;
+  await app.listen(portNumber);
+  logger.log(`Listening on port ${portNumber}`);
 }
 bootstrap();
