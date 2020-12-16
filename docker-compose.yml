@@ -1,0 +1,18 @@
+version: "3.9"
+services:
+  clamav:
+    image: "mkodockx/docker-clamav:alpine"
+    ports:
+      - "127.0.0.1:3310:3310"
+    hostname: "clamav"
+  virus-scan-service:
+    build: .
+    ports:
+      - "127.0.0.1:5000:5000"
+    environment:
+      - PORT:5000
+      - CLAMAV_HOST=clamav
+      - CLAMAV_PORT=3310
+    depends_on:
+      - clamav
+

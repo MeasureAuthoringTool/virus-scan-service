@@ -1,0 +1,13 @@
+export const ScanFileServiceProvider = 'ScanFileServiceProvider';
+export const NodeClamProvider = 'NodeClamProvider';
+export const DEFAULT_PORT = 5000;
+export const DEFAULT_API_KEY = '1234567';
+export const DEFAULT_CLAMAV_HOST = '127.0.0.1';
+export const DEFAULT_CLAMAV_PORT = 3310;
+export const DEFAULT_CLAMAV_TIMEOUT = 5000;
+export const DEFAULT_HEALTH_PING_URL = 'https://www.clamav.net';
+export const DEFAULT_HEALTH_DISK_THRESHOLD_PERCENT = 0.9;
+export const DEFAULT_HEALTH_DISK_THRESHOLD_PATH = '/';
+export const DEFAULT_HEALTH_MEMORY_HEAP_THRESHOLD = 300 * 1024 * 1024; // 300 MB
+export const DEFAULT_HEALTH_MEMORY_RSS_THRESHOLD = 300 * 1024 * 1024; // 300 MB
+export const API_KEY_GUARD = 'api-key';
