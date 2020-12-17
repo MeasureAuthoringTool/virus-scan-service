@@ -61,7 +61,7 @@ describe('ScanFileService', () => {
         clamdscan: {
           host: '127.0.0.1',
           port: 3310,
-          timeout: 5 * 1000,
+          timeout: 2 * 60 * 1000, // the service converts from seconds to milliseconds
         },
       });
       expect(result).toBe(service);
