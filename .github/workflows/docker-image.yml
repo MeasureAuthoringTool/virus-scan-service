@@ -41,7 +41,7 @@ jobs:
           DOCKER_HUB_USER: ${{secrets.DOCKER_HUB_USER}}
           DOCKER_HUB_PASSWORD: ${{secrets.DOCKER_HUB_PASSWORD}}
         run: |
-          docker login -u DOCKER_HUB_USER -p DOCKER_HUB_PASSWORD
+          docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASSWORD
 
       - name: Build the Docker image
         run: docker build . --file Dockerfile --tag measureauthoringtool/virus-scan-service
