@@ -47,7 +47,7 @@ jobs:
         run: docker build . --file Dockerfile --tag measureauthoringtool/virus-scan-service
 
       - name: Tag the Docker image as latest
-        run: docker image tag measureauthoringtool/virus-scan-service latest
+        run: docker image tag measureauthoringtool/virus-scan-service measureauthoringtool/virus-scan-service:latest
 
       - name: Push "latest" tag to Docker Hub
         run: docker image push measureauthoringtool/virus-scan-service:latest
@@ -56,7 +56,7 @@ jobs:
         run: echo "RELEASE_VERSION=${GITHUB_REF:11}" >> $GITHUB_ENV
 
       - name: Tag the Docker image with version tag
-        run: docker image tag measureauthoringtool/virus-scan-service $RELEASE_VERSION
+        run: docker image tag measureauthoringtool/virus-scan-service measureauthoringtool/virus-scan-service:$RELEASE_VERSION
 
       - name: Push version number tag to Docker Hub
         run: docker image push measureauthoringtool/virus-scan-service:$RELEASE_VERSION
