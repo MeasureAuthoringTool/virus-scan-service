@@ -56,4 +56,4 @@ jobs:
         run: docker image tag measureauthoringtool/virus-scan-service $RELEASE_VERSION
 
       - name: Docker Push
-        run: docker push --all-tags measureauthoringtool/virus-scan-service
+        run: docker image push --all-tags measureauthoringtool/virus-scan-service
