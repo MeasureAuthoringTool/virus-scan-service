@@ -6,13 +6,20 @@ services:
       - "127.0.0.1:3310:3310"
     hostname: "clamav"
   virus-scan-service:
-    build: .
+    image: "measureauthoringtool/virus-scan-service${VIRUS_SCAN_TAG}"
     ports:
       - "127.0.0.1:5000:5000"
     environment:
-      - PORT:5000
+      - PORT=5000
+      - API_KEY=${API_KEY}
       - CLAMAV_HOST=clamav
       - CLAMAV_PORT=3310
+      - CLAMAV_TIMEOUT=${CLAMAV_TIMEOUT}
+      - HEALTH_PING_URL=${HEALTH_PING_URL}
+      - HEALTH_DISK_THRESHOLD_PERCENT=${HEALTH_DISK_THRESHOLD_PERCENT}
+      - HEALTH_DISK_THRESHOLD_PATH=${HEALTH_DISK_THRESHOLD_PATH}
+      - HEALTH_MEMORY_HEAP_THRESHOLD=${HEALTH_MEMORY_HEAP_THRESHOLD}
+      - HEALTH_MEMORY_RSS_THRESHOLD=${HEALTH_MEMORY_RSS_THRESHOLD}
+
     depends_on:
       - clamav
-

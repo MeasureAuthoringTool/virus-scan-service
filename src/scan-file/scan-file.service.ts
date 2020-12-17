@@ -27,7 +27,7 @@ export class ScanFileService {
         clamdscan: {
           host: this.config.clamAVHost,
           port: this.config.clamAVPort,
-          timeout: this.config.clamAVTimeout,
+          timeout: this.config.clamAVTimeout * 1000, // Convert to milliseconds
         },
       });
       this.logger.log('ClamAV connection successfully initialized');
