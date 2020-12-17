@@ -1,0 +1,63 @@
+name: Docker Image CI
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  build:
+    name: Create a Docker image and publish it to Docker Hub
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Use Node.js 15.x
+        uses: actions/setup-node@v2-beta
+        with:
+          node-version: 15.x
+
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
+      - name: Install node dependencies
+        run: npm ci
+
+      - name: Build the source code
+        run: npm run-script build
+
+      - name: docker login
+        env:
+          DOCKER_HUB_USER: ${{secrets.DOCKER_HUB_USER}}
+          DOCKER_HUB_PASSWORD: ${{secrets.DOCKER_HUB_PASSWORD}}
+        run: |
+          docker login -u DOCKER_HUB_USER -p DOCKER_HUB_PASSWORD
+
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag measureauthoringtool/virus-scan-service
+
+      - name: Tag the Docker image as latest
+        run: docker image tag measureauthoringtool/virus-scan-service latest
+
+      - name: Capture GitHub tag
+        uses: olegtarasov/get-tag@v2
+        id: tagName
+        with:
+          tagRegex: "v(.*)"
+          tagRegexGroup: 1
+
+      - name: Tag the Docker image with version tag
+        run: docker image tag measureauthoringtool/virus-scan-service $GIT_TAG_NAME
+
+      - name: Docker Push
+        run: docker push --all-tags measureauthoringtool/virus-scan-service
