@@ -1,4 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import {
   DiskHealthIndicator,
   DNSHealthIndicator,
@@ -10,6 +11,7 @@ import {
 import { VersionHealthIndicator } from './version.health';
 import { HealthCheckConfig } from './health-check.config';
 
+@ApiTags('Health Check')
 @Controller('health-check')
 export class HealthCheckController {
   constructor(
