@@ -8,13 +8,13 @@ import { ScanFileService } from './scan-file.service';
 import stubbedMutlerFile from '../../test/stubs/stubbedMutlerFile';
 import { NodeClamProvider, ScanFileServiceProvider } from '../constants';
 import NodeClam from './clamscan';
-import { ScanResult } from './scan-file.types';
+import { ScanResultDto } from './scan-result.dto';
 import { ScanFileConfig } from './scan-file.config';
 
 describe('ScanFileController', () => {
   let controller: ScanFileController;
   let scanFileStub: SinonStub;
-  let scanResult: ScanResult;
+  let scanResult: ScanResultDto;
 
   beforeEach(async () => {
     scanResult = {
