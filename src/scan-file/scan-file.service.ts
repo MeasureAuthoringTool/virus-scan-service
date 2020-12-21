@@ -4,7 +4,7 @@ import NodeClam from './clamscan';
 import { Readable } from 'stream';
 import ClamException from './ClamException';
 import { NodeClamProvider } from '../constants';
-import { ScanResult } from './scan-file.types';
+import { ScanResultDto } from './scan-result.dto';
 import { ScanFileConfig } from './scan-file.config';
 
 @Injectable()
@@ -40,7 +40,7 @@ export class ScanFileService {
     return this;
   }
 
-  async scanFile(file: Express.Multer.File): Promise<ScanResult> {
+  async scanFile(file: Express.Multer.File): Promise<ScanResultDto> {
     const stream = Readable.from(file.buffer);
 
     if (!this.clamscan) {
@@ -56,11 +56,11 @@ export class ScanFileService {
           `Virus(es) "${virusString}" detected in file ${file.originalname}`,
         );
       }
-      return {
-        fileName: file.originalname,
-        infected: result.is_infected,
-        viruses: result.viruses,
-      };
+      return new ScanResultDto(
+        file.originalname,
+        result.is_infected,
+        result.viruses,
+      );
     } catch (error) {
       const message = 'An error occurred while scanning file';
       this.logger.error(message, error);

@@ -8,6 +8,7 @@ import stubbedMutlerFile from '../../test/stubs/stubbedMutlerFile';
 import { NodeClamProvider } from '../constants';
 import ClamException from './ClamException';
 import { ScanFileConfig } from './scan-file.config';
+import { ScanResultDto } from './scan-result.dto';
 
 describe('ScanFileService', () => {
   let service: ScanFileService;
@@ -92,11 +93,13 @@ describe('ScanFileService', () => {
 
     it('should return details of a clean file', async () => {
       await service.init();
-      expect(await service.scanFile(stubbedMutlerFile)).toStrictEqual({
-        fileName: 'originalName.txt',
-        infected: false,
-        viruses: [],
-      });
+      expect(await service.scanFile(stubbedMutlerFile)).toStrictEqual(
+        ScanResultDto.parse({
+          fileName: 'originalName.txt',
+          infected: false,
+          viruses: [],
+        }),
+      );
       expect(logWarnStub).not.toHaveBeenCalled();
       expect(logErrorStub).not.toHaveBeenCalled();
     });
@@ -107,11 +110,13 @@ describe('ScanFileService', () => {
         viruses: ['bad1'],
       });
       await service.init();
-      expect(await service.scanFile(stubbedMutlerFile)).toStrictEqual({
-        fileName: 'originalName.txt',
-        infected: true,
-        viruses: ['bad1'],
-      });
+      expect(await service.scanFile(stubbedMutlerFile)).toStrictEqual(
+        ScanResultDto.parse({
+          fileName: 'originalName.txt',
+          infected: true,
+          viruses: ['bad1'],
+        }),
+      );
       expect(logErrorStub).not.toHaveBeenCalled();
       expect(logWarnStub).toHaveBeenCalledWith(
         'Virus(es) "bad1" detected in file originalName.txt',
@@ -124,11 +129,13 @@ describe('ScanFileService', () => {
         viruses: ['bad1', 'bad2'],
       });
       await service.init();
-      expect(await service.scanFile(stubbedMutlerFile)).toStrictEqual({
-        fileName: 'originalName.txt',
-        infected: true,
-        viruses: ['bad1', 'bad2'],
-      });
+      expect(await service.scanFile(stubbedMutlerFile)).toStrictEqual(
+        ScanResultDto.parse({
+          fileName: 'originalName.txt',
+          infected: true,
+          viruses: ['bad1', 'bad2'],
+        }),
+      );
       expect(logErrorStub).not.toHaveBeenCalled();
       expect(logWarnStub).toHaveBeenCalledWith(
         'Virus(es) "bad1", "bad2" detected in file originalName.txt',
