@@ -11,6 +11,8 @@ const validationSchema = Joi.object({
   HEALTH_DISK_THRESHOLD_PATH: Joi.string(),
   HEALTH_MEMORY_HEAP_THRESHOLD: Joi.number().positive().integer(),
   HEALTH_MEMORY_RSS_THRESHOLD: Joi.number().positive().integer(),
+  MAX_FILE_COUNT: Joi.number().positive().integer(),
+  MAX_FILE_SIZE: Joi.number().positive().integer(),
 });
 
 export default validationSchema;

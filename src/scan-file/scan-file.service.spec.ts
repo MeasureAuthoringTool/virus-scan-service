@@ -2,15 +2,25 @@ import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { restore as sinonRestore, stub, SinonStub } from 'sinon';
+import { Readable } from 'stream';
 import NodeClam from './clamscan';
 import { ScanFileService } from './scan-file.service';
-import stubbedMutlerFile from '../../test/stubs/stubbedMutlerFile';
 import { NodeClamProvider } from '../constants';
 import ClamException from './ClamException';
 import { ScanFileConfig } from './scan-file.config';
 import { ScanResultDto } from './scan-result.dto';
+import { stringToStream } from '../../test/utils/stream-utils';
 
 describe('ScanFileService', () => {
+  const fileName = 'someFile.txt';
+  const expectedInitParams = {
+    clamdscan: {
+      host: '127.0.0.1',
+      port: 3310,
+      timeout: 2 * 60 * 1000, // the service converts from seconds to milliseconds
+    },
+  };
+  let fileStream: Readable;
   let service: ScanFileService;
   let initStub: SinonStub;
   let scanStreamStub: SinonStub;
@@ -18,6 +28,7 @@ describe('ScanFileService', () => {
   let logErrorStub: SinonStub;
 
   beforeEach(async () => {
+    fileStream = stringToStream('These are the file contents');
     initStub = stub(NodeClam.prototype, 'init');
     initStub.resolves(new NodeClam());
     scanStreamStub = stub(NodeClam.prototype, 'scan_stream');
@@ -58,13 +69,7 @@ describe('ScanFileService', () => {
   describe('#init()', () => {
     it('should initialize the clamscan client successfully', async () => {
       const result = await service.init();
-      expect(initStub).toHaveBeenCalledWith({
-        clamdscan: {
-          host: '127.0.0.1',
-          port: 3310,
-          timeout: 2 * 60 * 1000, // the service converts from seconds to milliseconds
-        },
-      });
+      expect(initStub).toHaveBeenCalledWith(expectedInitParams);
       expect(result).toBe(service);
     });
 
@@ -81,21 +86,33 @@ describe('ScanFileService', () => {
   });
 
   describe('#scanFile()', () => {
-    it('should throw an error if service is not initalized', async () => {
+    it('should call ScanFileService.init() if not already initialized', async () => {
+      expect(await service.scanFile(fileStream, fileName)).toStrictEqual(
+        ScanResultDto.parse({
+          fileName: 'someFile.txt',
+          infected: false,
+          viruses: [],
+        }),
+      );
+      expect(initStub).toHaveBeenCalledWith(expectedInitParams);
+    });
+
+    it('should throw an error if ClamAV cannot be initialized', async () => {
+      initStub.rejects(new Error('something bad'));
       expect.assertions(2);
       try {
-        await service.scanFile(stubbedMutlerFile);
+        await service.scanFile(fileStream, fileName);
       } catch (error) {
         expect(error instanceof ClamException).toBeTruthy();
-        expect(error.message).toBe('ClamAV has not been initialized');
+        expect(error.message).toBe('Unable to initialize ClamAV');
       }
     });
 
     it('should return details of a clean file', async () => {
       await service.init();
-      expect(await service.scanFile(stubbedMutlerFile)).toStrictEqual(
+      expect(await service.scanFile(fileStream, fileName)).toStrictEqual(
         ScanResultDto.parse({
-          fileName: 'originalName.txt',
+          fileName: 'someFile.txt',
           infected: false,
           viruses: [],
         }),
@@ -110,16 +127,16 @@ describe('ScanFileService', () => {
         viruses: ['bad1'],
       });
       await service.init();
-      expect(await service.scanFile(stubbedMutlerFile)).toStrictEqual(
+      expect(await service.scanFile(fileStream, fileName)).toStrictEqual(
         ScanResultDto.parse({
-          fileName: 'originalName.txt',
+          fileName: 'someFile.txt',
           infected: true,
           viruses: ['bad1'],
         }),
       );
       expect(logErrorStub).not.toHaveBeenCalled();
       expect(logWarnStub).toHaveBeenCalledWith(
-        'Virus(es) "bad1" detected in file originalName.txt',
+        'Virus(es) "bad1" detected in file someFile.txt',
       );
     });
 
@@ -129,16 +146,16 @@ describe('ScanFileService', () => {
         viruses: ['bad1', 'bad2'],
       });
       await service.init();
-      expect(await service.scanFile(stubbedMutlerFile)).toStrictEqual(
+      expect(await service.scanFile(fileStream, fileName)).toStrictEqual(
         ScanResultDto.parse({
-          fileName: 'originalName.txt',
+          fileName: 'someFile.txt',
           infected: true,
           viruses: ['bad1', 'bad2'],
         }),
       );
       expect(logErrorStub).not.toHaveBeenCalled();
       expect(logWarnStub).toHaveBeenCalledWith(
-        'Virus(es) "bad1", "bad2" detected in file originalName.txt',
+        'Virus(es) "bad1", "bad2" detected in file someFile.txt',
       );
     });
 
@@ -148,7 +165,7 @@ describe('ScanFileService', () => {
       scanStreamStub.rejects(expectedError);
       expect.assertions(3);
       try {
-        await service.scanFile(stubbedMutlerFile);
+        await service.scanFile(fileStream, fileName);
       } catch (error) {
         expect(error instanceof ClamException).toBeTruthy();
         expect(error.message).toBe('An error occurred while scanning file');

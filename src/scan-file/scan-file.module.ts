@@ -5,6 +5,7 @@ import { ScanFileServiceProvider, NodeClamProvider } from '../constants';
 import NodeClam from './clamscan';
 import { ScanFileConfig } from './scan-file.config';
 import { AuthModule } from '../auth/auth.module';
+import { FileStreamService } from './file-stream.service';
 
 @Module({
   imports: [AuthModule],
@@ -27,6 +28,7 @@ import { AuthModule } from '../auth/auth.module';
       provide: NodeClamProvider,
       useClass: NodeClam,
     },
+    FileStreamService,
   ],
 })
 export class ScanFileModule {}
