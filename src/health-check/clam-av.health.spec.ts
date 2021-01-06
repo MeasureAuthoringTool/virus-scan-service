@@ -30,6 +30,11 @@ describe('ClamAvHealth', () => {
 
     logErrorStub = stub(Logger.prototype, 'error');
 
+    stub(ScanFileService.prototype, 'init').callsFake(function (
+      this: Promise<ScanFileService>,
+    ) {
+      return this;
+    });
     getVersionStub = stub(ScanFileService.prototype, 'getVersion').resolves(
       expectedRawVersion,
     );

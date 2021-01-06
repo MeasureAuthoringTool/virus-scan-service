@@ -58,6 +58,11 @@ describe('HealthCheckController', () => {
       details: expectedDetails,
     };
 
+    stub(ScanFileService.prototype, 'init').callsFake(function (
+      this: Promise<ScanFileService>,
+    ) {
+      return this;
+    });
     getVersionStub = stub(VersionNumberService.prototype, 'getVersion').returns(
       versionResult,
     );
