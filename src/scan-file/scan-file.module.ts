@@ -30,5 +30,6 @@ import { FileStreamService } from './file-stream.service';
     },
     FileStreamService,
   ],
+  exports: [ScanFileServiceProvider],
 })
 export class ScanFileModule {}

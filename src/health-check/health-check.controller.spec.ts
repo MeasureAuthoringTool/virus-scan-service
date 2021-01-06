@@ -11,13 +11,19 @@ import { HealthCheckController } from './health-check.controller';
 import { VersionHealthIndicator } from './version.health';
 import { VersionNumberService } from './version-number.service';
 import { HealthCheckConfig } from './health-check.config';
+import { ClamAvHealth } from './clam-av.health';
+import { GlobalModule } from '../global.module';
+import { ScanFileModule } from '../scan-file/scan-file.module';
+import { ScanFileService } from '../scan-file/scan-file.service';
 
 describe('HealthCheckController', () => {
   const versionResult = 'VERSION';
+  const expectedClamVersion = 'ClamAV 0.102.4/26039/Tue Jan  5 12:41:59 2021';
   let expectedDetails: HealthIndicatorResult;
   let expectedResult: HealthCheckResult;
   let controller: HealthCheckController;
   let getVersionStub: SinonStub;
+  let getClamVersionStub: SinonStub;
 
   beforeEach(async () => {
     // Build up the expected response object the service will return
@@ -38,6 +44,12 @@ describe('HealthCheckController', () => {
       'memory-rss': {
         status: 'up',
       },
+      'clamav-version': {
+        status: 'up',
+        clamAvVersion: '0.102.4',
+        signatureVersion: '26039',
+        signatureTimestamp: new Date(2021, 0, 5, 12, 41, 59),
+      },
     };
     expectedResult = {
       status: 'ok',
@@ -50,8 +62,11 @@ describe('HealthCheckController', () => {
       versionResult,
     );
 
+    getClamVersionStub = stub(ScanFileService.prototype, 'getVersion');
+    getClamVersionStub.resolves(expectedClamVersion);
+
     const module: TestingModule = await Test.createTestingModule({
-      imports: [TerminusModule],
+      imports: [TerminusModule, GlobalModule, ScanFileModule],
       controllers: [HealthCheckController],
       providers: [
         Logger,
@@ -59,6 +74,7 @@ describe('HealthCheckController', () => {
         VersionNumberService,
         HealthCheckConfig,
         ConfigService,
+        ClamAvHealth,
       ],
     }).compile();
 

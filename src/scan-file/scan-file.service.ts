@@ -83,4 +83,21 @@ export class ScanFileService {
       throw new ClamException(message);
     }
   }
+
+  /**
+   * Gets the current version of Clam AV
+   */
+  public async getVersion(): Promise<string> {
+    if (!this.clamscan) {
+      this.clamscan = await this.initializeClamAV();
+    }
+
+    try {
+      return await this.clamscan.get_version();
+    } catch (error) {
+      const message = 'An error occurred while getting the ClamAV version';
+      this.logger.error(message, error);
+      throw new ClamException(message);
+    }
+  }
 }

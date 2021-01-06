@@ -34,7 +34,8 @@ describe('ScanFileModule', () => {
 
   it('should have the specified exports', () => {
     const exports = Reflect.getMetadata('exports', ScanFileModule);
-    expect(exports).toBeUndefined();
+    expect(exports).toBeArrayOfSize(1);
+    expect(exports[0]).toBe(ScanFileServiceProvider);
   });
 
   it('should build a ScanFileService correctly in the provider factory', async () => {

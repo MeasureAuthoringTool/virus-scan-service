@@ -12,6 +12,7 @@ import { ScanResultDto } from './scan-result.dto';
 import { stringToStream } from '../../test/utils/stream-utils';
 
 describe('ScanFileService', () => {
+  const expectedClamAvVersion = '1.2.3';
   const fileName = 'someFile.txt';
   const expectedInitParams = {
     clamdscan: {
@@ -24,6 +25,7 @@ describe('ScanFileService', () => {
   let service: ScanFileService;
   let initStub: SinonStub;
   let scanStreamStub: SinonStub;
+  let getVersionStub: SinonStub;
   let logWarnStub: SinonStub;
   let logErrorStub: SinonStub;
 
@@ -36,6 +38,8 @@ describe('ScanFileService', () => {
       is_infected: false,
       viruses: [],
     });
+    getVersionStub = stub(NodeClam.prototype, 'get_version');
+    getVersionStub.resolves(expectedClamAvVersion);
 
     // Mock logger
     logWarnStub = stub(Logger.prototype, 'warn');
@@ -171,6 +175,44 @@ describe('ScanFileService', () => {
         expect(error.message).toBe('An error occurred while scanning file');
         expect(logErrorStub).toHaveBeenCalledWith(
           'An error occurred while scanning file',
+          expectedError,
+        );
+      }
+    });
+  });
+
+  describe('#getVersion()', () => {
+    it('should call ScanFileService.init() if not already initialized', async () => {
+      await service.getVersion();
+      expect(initStub).toHaveBeenCalledWith(expectedInitParams);
+    });
+
+    it('should return the ClamAV version using clamscan', async () => {
+      await service.init();
+      const result: string = await service.getVersion();
+      expect(result).toBe(expectedClamAvVersion);
+    });
+
+    it('should return the ClamAV version using clamscan', async () => {
+      await service.init();
+      const result: string = await service.getVersion();
+      expect(result).toBe(expectedClamAvVersion);
+    });
+
+    it('should handle errors while getting the ClamAV version ', async () => {
+      await service.init();
+      const expectedError = new Error('Bad stuff happened');
+      getVersionStub.rejects(expectedError);
+      expect.assertions(3);
+      try {
+        await service.getVersion();
+      } catch (error) {
+        const expectedMessage =
+          'An error occurred while getting the ClamAV version';
+        expect(error instanceof ClamException).toBeTruthy();
+        expect(error.message).toBe(expectedMessage);
+        expect(logErrorStub).toHaveBeenCalledWith(
+          expectedMessage,
           expectedError,
         );
       }
