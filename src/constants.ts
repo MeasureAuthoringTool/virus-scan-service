@@ -10,4 +10,6 @@ export const DEFAULT_HEALTH_DISK_THRESHOLD_PERCENT = 0.9;
 export const DEFAULT_HEALTH_DISK_THRESHOLD_PATH = '/';
 export const DEFAULT_HEALTH_MEMORY_HEAP_THRESHOLD = 300 * 1024 * 1024; // 300 MB
 export const DEFAULT_HEALTH_MEMORY_RSS_THRESHOLD = 300 * 1024 * 1024; // 300 MB
+export const DEFAULT_MAX_FILE_COUNT = 4; // Upload 4 files in a single request
+export const DEFAULT_MAX_FILE_SIZE = 25 * 1024 * 1024; // 25 MB
 export const API_KEY_GUARD = 'api-key';

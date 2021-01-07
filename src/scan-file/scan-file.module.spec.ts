@@ -8,6 +8,7 @@ import { ScanFileConfig } from './scan-file.config';
 import { ScanFileServiceProvider, NodeClamProvider } from '../constants';
 import NodeClam from './clamscan';
 import { ScanFileService } from './scan-file.service';
+import { FileStreamService } from './file-stream.service';
 
 describe('ScanFileModule', () => {
   it('should have the specified imports', () => {
@@ -24,15 +25,17 @@ describe('ScanFileModule', () => {
 
   it('should have the specified providers', () => {
     const providers = Reflect.getMetadata('providers', ScanFileModule);
-    expect(providers).toBeArrayOfSize(3);
+    expect(providers).toBeArrayOfSize(4);
     expect(providers[0]).toBe(ScanFileConfig);
     expect(providers[1].provide).toBe(ScanFileServiceProvider);
     expect(providers[2].provide).toBe(NodeClamProvider);
+    expect(providers[3]).toBe(FileStreamService);
   });
 
   it('should have the specified exports', () => {
     const exports = Reflect.getMetadata('exports', ScanFileModule);
-    expect(exports).toBeUndefined();
+    expect(exports).toBeArrayOfSize(1);
+    expect(exports[0]).toBe(ScanFileServiceProvider);
   });
 
   it('should build a ScanFileService correctly in the provider factory', async () => {
