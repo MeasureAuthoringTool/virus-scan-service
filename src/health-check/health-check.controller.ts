@@ -10,6 +10,7 @@ import {
 } from '@nestjs/terminus';
 import { VersionHealthIndicator } from './version.health';
 import { HealthCheckConfig } from './health-check.config';
+import { ClamAvHealth } from './clam-av.health';
 
 @ApiTags('Health Check')
 @Controller('health-check')
@@ -21,6 +22,7 @@ export class HealthCheckController {
     private memory: MemoryHealthIndicator,
     private version: VersionHealthIndicator,
     private config: HealthCheckConfig,
+    private clamHealth: ClamAvHealth,
   ) {}
 
   @Get()
@@ -37,6 +39,7 @@ export class HealthCheckController {
       () =>
         this.memory.checkHeap('memory-heap', this.config.memoryHeapThreshold),
       () => this.memory.checkRSS('memory-rss', this.config.memoryRssThreshold),
+      () => this.clamHealth.clamVersion('clamav-version'),
     ]);
   }
 }

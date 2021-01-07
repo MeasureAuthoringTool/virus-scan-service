@@ -38,7 +38,14 @@ describe('AppController (e2e)', () => {
       .set('apikey', '1234567')
       .attach('file', 'test/filesToScan/cleanFile.txt')
       .expect(200)
-      .expect({ fileName: 'cleanFile.txt', infected: false, viruses: [] });
+      .expect({
+        scanResults: [
+          { fileName: 'cleanFile.txt', infected: false, viruses: [] },
+        ],
+        filesScanned: 1,
+        infectedFileCount: 0,
+        cleanFileCount: 1,
+      });
   });
 
   it('/scan-file unauthorized', () => {

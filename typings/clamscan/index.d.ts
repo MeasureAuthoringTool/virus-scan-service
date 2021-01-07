@@ -18,7 +18,8 @@ declare module 'clamscan' {
     constructor();
 
     init(options: InitOptions): Promise<NodeClam>;
-    scan_stream(stream: Stream.Readable): ScanResult;
+    scan_stream(stream: Stream.Readable): Promise<ScanResult>;
+    get_version(): Promise<string>;
   }
 
   export = NodeClam;

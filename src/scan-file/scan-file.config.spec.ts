@@ -6,6 +6,8 @@ import {
   DEFAULT_CLAMAV_HOST,
   DEFAULT_CLAMAV_PORT,
   DEFAULT_CLAMAV_TIMEOUT,
+  DEFAULT_MAX_FILE_COUNT,
+  DEFAULT_MAX_FILE_SIZE,
 } from '../constants';
 
 describe('ScanFileConfig', () => {
@@ -60,6 +62,30 @@ describe('ScanFileConfig', () => {
       it('should return the default CLAMAV_TIMEOUT value when CLAMAV_TIMEOUT not specified', () => {
         getStub.withArgs('CLAMAV_TIMEOUT').returns(undefined);
         expect(appConfigService.clamAVTimeout).toBe(DEFAULT_CLAMAV_TIMEOUT);
+      });
+    });
+
+    describe('#get maxFileCount()', () => {
+      it('should return the MAX_FILE_COUNT config value', () => {
+        getStub.withArgs('MAX_FILE_COUNT').returns(9);
+        expect(appConfigService.maxFileCount).toBe(9);
+      });
+
+      it('should return the default MAX_FILE_COUNT value when MAX_FILE_COUNT not specified', () => {
+        getStub.withArgs('MAX_FILE_COUNT').returns(undefined);
+        expect(appConfigService.maxFileCount).toBe(DEFAULT_MAX_FILE_COUNT);
+      });
+    });
+
+    describe('#get maxFileSize()', () => {
+      it('should return the MAX_FILE_SIZE config value', () => {
+        getStub.withArgs('MAX_FILE_SIZE').returns(63000);
+        expect(appConfigService.maxFileSize).toBe(63000);
+      });
+
+      it('should return the default MAX_FILE_SIZE value when MAX_FILE_SIZE not specified', () => {
+        getStub.withArgs('MAX_FILE_SIZE').returns(undefined);
+        expect(appConfigService.maxFileSize).toBe(DEFAULT_MAX_FILE_SIZE);
       });
     });
   });
