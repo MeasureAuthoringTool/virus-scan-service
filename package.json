@@ -27,7 +27,7 @@
     "@nestjs/passport": "^7.1.5",
     "@nestjs/platform-express": "^7.6.7",
     "@nestjs/swagger": "^4.7.12",
-    "@nestjs/terminus": "^7.0.1",
+    "@nestjs/terminus": "^7.1.0",
     "@types/busboy": "^0.2.3",
     "@types/joi": "^17.2.3",
     "busboy": "^0.3.1",
