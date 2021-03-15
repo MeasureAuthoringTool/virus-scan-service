@@ -2,10 +2,10 @@ import { Controller, Get } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import {
   DiskHealthIndicator,
-  DNSHealthIndicator,
   HealthCheck,
   HealthCheckService,
   HealthCheckResult,
+  HttpHealthIndicator,
   MemoryHealthIndicator,
 } from '@nestjs/terminus';
 import { VersionHealthIndicator } from './version.health';
@@ -18,7 +18,7 @@ export class HealthCheckController {
   constructor(
     private health: HealthCheckService,
     private disk: DiskHealthIndicator,
-    private dns: DNSHealthIndicator,
+    private http: HttpHealthIndicator,
     private memory: MemoryHealthIndicator,
     private version: VersionHealthIndicator,
     private config: HealthCheckConfig,
@@ -30,7 +30,10 @@ export class HealthCheckController {
   checkHealth(): Promise<HealthCheckResult> {
     return this.health.check([
       () => this.version.version('app-version'),
-      () => this.dns.pingCheck('clam-av-dns', this.config.pingUrl),
+      () =>
+        this.http.pingCheck('clam-av-dns', this.config.pingUrl, {
+          headers: { 'User-Agent': 'Virus Scan  v1' },
+        }),
       () =>
         this.disk.checkStorage('disk-storage', {
           thresholdPercent: this.config.diskThresholdPercent,
