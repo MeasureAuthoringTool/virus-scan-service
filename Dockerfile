@@ -1,4 +1,4 @@
-FROM node:15
+FROM node:16.6.0
 
 # Default values for clamav
 ENV CLAMAV_HOST=clamav
