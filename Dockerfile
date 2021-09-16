@@ -1,4 +1,4 @@
-FROM node:16.7-bullseye-slim
+FROM node:current-bullseye-slim
 
 # Default values for clamav
 ENV CLAMAV_HOST=clamav
