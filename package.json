@@ -27,7 +27,7 @@
     "@nestjs/passport": "^7.1.5",
     "@nestjs/platform-express": "^7.6.18",
     "@nestjs/swagger": "^4.8.1",
-    "@nestjs/terminus": "^7.2.0",
+    "@nestjs/terminus": "^8.0.1",
     "busboy": "^0.3.1",
     "clamscan": "^1.4.2",
     "date-fns": "^2.22.1",
