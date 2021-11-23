@@ -17,7 +17,9 @@ describe('environment config validation schema', () => {
         abortEarly: false,
       });
       fail('Exception not caught');
-    } catch (error) {
+    } catch (err) {
+      expect(err).toBeInstanceOf(Joi.ValidationError);
+      const error = err as Joi.ValidationError;
       expect(error.message).not.toBe('Exception not caught');
       expect(error).toBeInstanceOf(Joi.ValidationError);
       expect(error.details).toBeArrayOfSize(1);

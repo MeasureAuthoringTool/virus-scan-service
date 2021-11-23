@@ -6,6 +6,7 @@ import {
   HealthIndicatorResult,
   TerminusModule,
 } from '@nestjs/terminus';
+import { HttpModule } from '@nestjs/axios';
 import { restore as sinonRestore, stub, SinonStub } from 'sinon';
 import { HealthCheckController } from './health-check.controller';
 import { VersionHealthIndicator } from './version.health';
@@ -71,7 +72,7 @@ describe('HealthCheckController', () => {
     getClamVersionStub.resolves(expectedClamVersion);
 
     const module: TestingModule = await Test.createTestingModule({
-      imports: [TerminusModule, GlobalModule, ScanFileModule],
+      imports: [HttpModule, TerminusModule, GlobalModule, ScanFileModule],
       controllers: [HealthCheckController],
       providers: [
         Logger,
