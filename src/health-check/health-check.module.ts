@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TerminusModule } from '@nestjs/terminus';
+import { HttpModule } from '@nestjs/axios';
 import { HealthCheckController } from './health-check.controller';
 import { VersionNumberService } from './version-number.service';
 import { VersionHealthIndicator } from './version.health';
@@ -8,7 +9,7 @@ import { ClamAvHealth } from './clam-av.health';
 import { ScanFileModule } from '../scan-file/scan-file.module';
 
 @Module({
-  imports: [TerminusModule, ScanFileModule],
+  imports: [HttpModule, TerminusModule, ScanFileModule],
   controllers: [HealthCheckController],
   providers: [
     VersionHealthIndicator,

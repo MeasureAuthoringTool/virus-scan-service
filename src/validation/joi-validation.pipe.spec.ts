@@ -36,8 +36,9 @@ describe('JoiValidationPipe', () => {
       expect.assertions(2);
       try {
         validationPipe.transform({ bad: 'input' });
-      } catch (error) {
-        expect(error).toBeInstanceOf(BadRequestException);
+      } catch (err) {
+        expect(err).toBeInstanceOf(BadRequestException);
+        const error = err as BadRequestException;
         expect(error.message).toBe('"bad" is not allowed');
       }
     });

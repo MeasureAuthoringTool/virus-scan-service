@@ -210,5 +210,27 @@ describe('FileStreamService', () => {
         );
       });
     });
+
+    it('should throw an error if content-type is unspecified', () => {
+      delete headers['content-type'];
+
+      postDataBuilder.addFile('file', 'clean.txt', 'No virus here');
+
+      const stream = Readable.from([postDataBuilder.build()]);
+
+      try {
+        service.createFileObservable(headers, stream);
+        expect.fail('Error not thrown');
+      } catch (err) {
+        expect(err).toBeInstanceOf(HttpException);
+        const error = err as HttpException;
+        expect(error.message).toBe('Missing Content-Type');
+        expect(error.getStatus()).toBe(400);
+        expect(logErrorStub).toHaveBeenCalledWith(
+          'Error initializing busboy',
+          error.getResponse(),
+        );
+      }
+    });
   });
 });
