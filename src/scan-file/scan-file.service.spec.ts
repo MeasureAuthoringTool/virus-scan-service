@@ -35,7 +35,7 @@ describe('ScanFileService', () => {
     initStub.resolves(new NodeClam());
     scanStreamStub = stub(NodeClam.prototype, 'scanStream');
     scanStreamStub.resolves({
-      is_infected: false,
+      isInfected: false,
       viruses: [],
     });
     getVersionStub = stub(NodeClam.prototype, 'getVersion');
@@ -129,7 +129,7 @@ describe('ScanFileService', () => {
 
     it('should return details of file infected with one virus', async () => {
       scanStreamStub.resolves({
-        is_infected: true,
+        isInfected: true,
         viruses: ['bad1'],
       });
       await service.init();
@@ -148,7 +148,7 @@ describe('ScanFileService', () => {
 
     it('should return details of a file infected with multiple viruses', async () => {
       scanStreamStub.resolves({
-        is_infected: true,
+        isInfected: true,
         viruses: ['bad1', 'bad2'],
       });
       await service.init();
