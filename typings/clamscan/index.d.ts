@@ -10,7 +10,7 @@ declare module 'clamscan' {
   }
 
   interface ScanResult {
-    is_infected: boolean;
+    isInfected: boolean;
     viruses: Array<string>;
   }
 
