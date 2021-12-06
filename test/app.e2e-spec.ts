@@ -1,12 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { Buffer } from "buffer";
+import { Buffer } from 'buffer';
 import { AppModule } from '../src/app.module';
 import { version } from '../package.json';
 
 describe('AppController (e2e)', () => {
-  const VIRUS_TEXT = "X5O!P%@AP[4\\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*";
+  const VIRUS_TEXT =
+    'X5O!P%@AP[4\\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*';
   let app: INestApplication;
 
   beforeEach(async () => {
@@ -60,7 +61,11 @@ describe('AppController (e2e)', () => {
       .expect(200)
       .expect({
         scanResults: [
-          { fileName: 'eicar.txt', infected: true, viruses: [ 'Win.Test.EICAR_HDB-1' ] },
+          {
+            fileName: 'eicar.txt',
+            infected: true,
+            viruses: ['Win.Test.EICAR_HDB-1'],
+          },
         ],
         filesScanned: 1,
         infectedFileCount: 1,
