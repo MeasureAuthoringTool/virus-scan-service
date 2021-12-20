@@ -4,9 +4,9 @@ const defaultBoundary = 'XXX';
  * This is builder can generate realistic looking POST data for testing.
  */
 export class PostDataBuilder {
-  private readonly boundary;
+  private readonly boundary: string;
   private postData = '';
-  constructor(boundary = defaultBoundary) {
+  constructor(boundary: string = defaultBoundary) {
     this.boundary = `--${boundary}`;
     this.reset();
   }

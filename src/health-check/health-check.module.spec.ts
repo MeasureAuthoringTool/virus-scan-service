@@ -1,5 +1,6 @@
 import { HealthCheckModule } from './health-check.module';
 import { TerminusModule } from '@nestjs/terminus';
+import { HttpModule } from '@nestjs/axios';
 import { HealthCheckController } from './health-check.controller';
 import { VersionNumberService } from './version-number.service';
 import { VersionHealthIndicator } from './version.health';
@@ -10,9 +11,10 @@ import { ScanFileModule } from '../scan-file/scan-file.module';
 describe('HealthCheckModule', () => {
   it('should have the specified imports', () => {
     const imports = Reflect.getMetadata('imports', HealthCheckModule);
-    expect(imports).toBeArrayOfSize(2);
-    expect(imports[0]).toBe(TerminusModule);
-    expect(imports[1]).toBe(ScanFileModule);
+    expect(imports).toBeArrayOfSize(3);
+    expect(imports[0]).toBe(HttpModule);
+    expect(imports[1]).toBe(TerminusModule);
+    expect(imports[2]).toBe(ScanFileModule);
   });
 
   it('should have the specified controllers', () => {

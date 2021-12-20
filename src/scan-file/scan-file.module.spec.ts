@@ -50,14 +50,9 @@ describe('ScanFileModule', () => {
     const loggerStub = createStubInstance(Logger);
     const logger = <Logger>(<unknown>loggerStub);
     const nodeClam: NodeClam = createStubInstance(NodeClam);
-    const stubConfigService = <ConfigService>(
-      (<unknown>createStubInstance(ConfigService))
-    );
+    const stubConfigService = createStubInstance(ConfigService);
     const scanFileConfig = new ScanFileConfig(stubConfigService);
-    const expectedResult = <ScanFileService>(
-      (<unknown>createStubInstance(ScanFileService))
-    );
-    const setContextStub = loggerStub.setContext;
+    const expectedResult = createStubInstance(ScanFileService);
     const initStub = stub(ScanFileService.prototype, 'init').resolves(
       expectedResult,
     );
@@ -72,7 +67,6 @@ describe('ScanFileModule', () => {
 
     // Assert results
     expect(result).toBe(expectedResult);
-    expect(setContextStub).toHaveBeenCalledWith(ScanFileService.name);
     expect(initStub).toHaveBeenCalledWith();
   });
 });

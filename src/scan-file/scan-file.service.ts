@@ -15,7 +15,6 @@ export class ScanFileService {
     @Inject(NodeClamProvider) private nodeClam: NodeClam,
     @Inject(ScanFileConfig) private config: ScanFileConfig,
   ) {
-    logger.setContext(ScanFileService.name);
     this.clamscan = null;
   }
 
@@ -69,14 +68,14 @@ export class ScanFileService {
 
     this.logger.log(`Scanning file ${fileName}`);
     try {
-      const result = await this.clamscan.scan_stream(stream);
-      if (result.is_infected) {
+      const result = await this.clamscan.scanStream(stream);
+      if (result.isInfected) {
         const virusString = result.viruses.join('", "');
         this.logger.warn(
           `Virus(es) "${virusString}" detected in file ${fileName}`,
         );
       }
-      return new ScanResultDto(fileName, result.is_infected, result.viruses);
+      return new ScanResultDto(fileName, result.isInfected, result.viruses);
     } catch (error) {
       const message = 'An error occurred while scanning file';
       this.logger.error(message, error);
@@ -93,7 +92,7 @@ export class ScanFileService {
     }
 
     try {
-      return await this.clamscan.get_version();
+      return await this.clamscan.getVersion();
     } catch (error) {
       const message = 'An error occurred while getting the ClamAV version';
       this.logger.error(message, error);

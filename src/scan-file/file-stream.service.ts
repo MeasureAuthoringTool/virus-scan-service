@@ -7,9 +7,11 @@ import {
 } from '@nestjs/common';
 import { Observable, Subscriber } from 'rxjs';
 import * as Busboy from 'busboy';
-import { IncomingHttpHeaders } from 'http';
 import { Readable } from 'stream';
 import { ScanFileConfig } from './scan-file.config';
+import http from 'http';
+
+type BusboyHeaders = { 'content-type': string } & http.IncomingHttpHeaders;
 
 /**
  * This represents an HTTP POST form file
@@ -28,14 +30,25 @@ export class FileStreamService {
   ) {}
 
   createFileObservable(
-    headers: IncomingHttpHeaders,
+    headers: http.IncomingHttpHeaders,
     requestStream: Readable,
   ): Observable<FormFile> {
+    // Cast the header type for busboy
+    // Note- if the content-type is missing, Busboy will complain (which is what we want)
+    const busboyHeaders: BusboyHeaders = headers as BusboyHeaders;
+
     const limits = {
       files: this.config.maxFileCount,
       fileSize: this.config.maxFileSize,
     };
-    const busboy = new Busboy({ headers, limits });
+
+    let busboy: Busboy.Busboy;
+    try {
+      busboy = new Busboy({ headers: busboyHeaders, limits });
+    } catch (err) {
+      this.logger.error('Error initializing busboy', err);
+      throw new BadRequestException(err);
+    }
 
     const result = new Observable<FormFile>(
       (subscriber: Subscriber<FormFile>) => {

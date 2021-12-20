@@ -10,7 +10,7 @@ declare module 'clamscan' {
   }
 
   interface ScanResult {
-    is_infected: boolean;
+    isInfected: boolean;
     viruses: Array<string>;
   }
 
@@ -18,8 +18,8 @@ declare module 'clamscan' {
     constructor();
 
     init(options: InitOptions): Promise<NodeClam>;
-    scan_stream(stream: Stream.Readable): Promise<ScanResult>;
-    get_version(): Promise<string>;
+    scanStream(stream: Stream.Readable): Promise<ScanResult>;
+    getVersion(): Promise<string>;
   }
 
   export = NodeClam;

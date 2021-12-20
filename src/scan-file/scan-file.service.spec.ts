@@ -33,12 +33,12 @@ describe('ScanFileService', () => {
     fileStream = stringToStream('These are the file contents');
     initStub = stub(NodeClam.prototype, 'init');
     initStub.resolves(new NodeClam());
-    scanStreamStub = stub(NodeClam.prototype, 'scan_stream');
+    scanStreamStub = stub(NodeClam.prototype, 'scanStream');
     scanStreamStub.resolves({
-      is_infected: false,
+      isInfected: false,
       viruses: [],
     });
-    getVersionStub = stub(NodeClam.prototype, 'get_version');
+    getVersionStub = stub(NodeClam.prototype, 'getVersion');
     getVersionStub.resolves(expectedClamAvVersion);
 
     // Mock logger
@@ -82,8 +82,9 @@ describe('ScanFileService', () => {
       expect.assertions(2);
       try {
         await service.init();
-      } catch (error) {
-        expect(error instanceof ClamException).toBeTruthy();
+      } catch (err) {
+        expect(err instanceof ClamException).toBeTruthy();
+        const error = err as ClamException;
         expect(error.message).toBe('Unable to initialize ClamAV');
       }
     });
@@ -106,8 +107,9 @@ describe('ScanFileService', () => {
       expect.assertions(2);
       try {
         await service.scanFile(fileStream, fileName);
-      } catch (error) {
-        expect(error instanceof ClamException).toBeTruthy();
+      } catch (err) {
+        expect(err instanceof ClamException).toBeTruthy();
+        const error = err as ClamException;
         expect(error.message).toBe('Unable to initialize ClamAV');
       }
     });
@@ -127,7 +129,7 @@ describe('ScanFileService', () => {
 
     it('should return details of file infected with one virus', async () => {
       scanStreamStub.resolves({
-        is_infected: true,
+        isInfected: true,
         viruses: ['bad1'],
       });
       await service.init();
@@ -146,7 +148,7 @@ describe('ScanFileService', () => {
 
     it('should return details of a file infected with multiple viruses', async () => {
       scanStreamStub.resolves({
-        is_infected: true,
+        isInfected: true,
         viruses: ['bad1', 'bad2'],
       });
       await service.init();
@@ -170,8 +172,9 @@ describe('ScanFileService', () => {
       expect.assertions(3);
       try {
         await service.scanFile(fileStream, fileName);
-      } catch (error) {
-        expect(error instanceof ClamException).toBeTruthy();
+      } catch (err) {
+        expect(err instanceof ClamException).toBeTruthy();
+        const error = err as ClamException;
         expect(error.message).toBe('An error occurred while scanning file');
         expect(logErrorStub).toHaveBeenCalledWith(
           'An error occurred while scanning file',
@@ -206,10 +209,11 @@ describe('ScanFileService', () => {
       expect.assertions(3);
       try {
         await service.getVersion();
-      } catch (error) {
+      } catch (err) {
         const expectedMessage =
           'An error occurred while getting the ClamAV version';
-        expect(error instanceof ClamException).toBeTruthy();
+        expect(err instanceof ClamException).toBeTruthy();
+        const error = err as ClamException;
         expect(error.message).toBe(expectedMessage);
         expect(logErrorStub).toHaveBeenCalledWith(
           expectedMessage,

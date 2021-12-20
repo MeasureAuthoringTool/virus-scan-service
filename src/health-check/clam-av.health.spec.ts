@@ -69,8 +69,9 @@ describe('ClamAvHealth', () => {
     } catch (err) {
       const message = 'Empty version information returned by ClamAV';
       expect(err).toBeInstanceOf(HealthCheckError);
-      expect(err.message).toBe(message);
-      expect(err.causes).toBe('');
+      const error = err as HealthCheckError;
+      expect(error.message).toBe(message);
+      expect(error.causes).toBe('');
       expect(logErrorStub).toHaveBeenCalledWith(message);
     }
   });
@@ -84,8 +85,9 @@ describe('ClamAvHealth', () => {
     } catch (err) {
       const message = 'Malformed version information returned by ClamAV';
       expect(err).toBeInstanceOf(HealthCheckError);
-      expect(err.message).toBe(message);
-      expect(err.causes).toBe('this is not formatted correctly');
+      const error = err as HealthCheckError;
+      expect(error.message).toBe(message);
+      expect(error.causes).toBe('this is not formatted correctly');
       expect(logErrorStub).toHaveBeenCalledWith(message);
     }
   });
@@ -99,8 +101,9 @@ describe('ClamAvHealth', () => {
       await clamAvHealth.clamVersion(key);
     } catch (err) {
       expect(err).toBeInstanceOf(HealthCheckError);
-      expect(err.causes).toBeInstanceOf(Error);
-      const cause: Error = err.causes;
+      const error = err as HealthCheckError;
+      expect(error.causes).toBeInstanceOf(Error);
+      const cause: Error = error.causes;
       expect(cause.message).toBe('ClamAV is angry!');
       expect(logErrorStub).toHaveBeenCalled();
     }

@@ -51,7 +51,8 @@ describe('VersionHealthIndicator', () => {
       await healthIndicator.version('version-key');
     } catch (err) {
       expect(err).toBeInstanceOf(HealthCheckError);
-      expect(err.causes).toStrictEqual({
+      const error = err as HealthCheckError;
+      expect(error.causes).toStrictEqual({
         'version-key': {
           status: 'down',
           version: null,
