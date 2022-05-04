@@ -158,7 +158,7 @@ describe('FileStreamService', () => {
       postDataBuilder.addFile('file', 'clean.txt', 'No virus here');
 
       expectFileTest(done, (file: FormFile, streamData: string) => {
-        expect(file.fileName).toBe('clean.txt');
+        expect(file.filename).toBe('clean.txt');
         expect(file.fieldName).toBe('file');
         expect(streamData).toBe('No virus here');
       });
@@ -173,13 +173,13 @@ describe('FileStreamService', () => {
       expectFileTest(done, (file: FormFile) => {
         switch (invocationCount) {
           case 0:
-            expect(file.fileName).toBe('one.txt');
+            expect(file.filename).toBe('one.txt');
             break;
           case 1:
-            expect(file.fileName).toBe('two.txt');
+            expect(file.filename).toBe('two.txt');
             break;
           case 2:
-            expect(file.fileName).toBe('three.txt');
+            expect(file.filename).toBe('three.txt');
             break;
         }
         invocationCount++;

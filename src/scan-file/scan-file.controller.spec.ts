@@ -52,7 +52,7 @@ describe('ScanFileController', () => {
 
     const formFile: FormFile = {
       fieldName: 'theField',
-      fileName: 'theFileName',
+      filename: 'theFileName',
       stream: stringToStream('File contents'),
     };
     createFileObservableStub.returns(from([formFile]));
