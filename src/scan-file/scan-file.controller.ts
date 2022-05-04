@@ -76,7 +76,7 @@ export class ScanFileController {
     // Convert the above Observable into an Observable that emits our result object
     return fileObservable.pipe(
       mergeMap((file: FormFile) => {
-        return from(this.scanFileService.scanFile(file.stream, file.fileName));
+        return from(this.scanFileService.scanFile(file.stream, file.filename));
       }),
       reduce(
         (acc: ScanResponseDto, scanResult: ScanResultDto): ScanResponseDto => {

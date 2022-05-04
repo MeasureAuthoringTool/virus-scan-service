@@ -18,7 +18,7 @@ type BusboyHeaders = { 'content-type': string } & http.IncomingHttpHeaders;
  */
 export interface FormFile {
   fieldName: string;
-  fileName: string;
+  filename: string;
   stream: Readable;
 }
 
@@ -44,7 +44,7 @@ export class FileStreamService {
 
     let busboy: Busboy.Busboy;
     try {
-      busboy = new Busboy({ headers: busboyHeaders, limits });
+      busboy = Busboy({ headers: busboyHeaders, limits });
     } catch (err) {
       this.logger.error('Error initializing busboy', err);
       throw new BadRequestException(err);
@@ -54,11 +54,12 @@ export class FileStreamService {
       (subscriber: Subscriber<FormFile>) => {
         busboy.on(
           'file',
-          (fieldName: string, stream: Readable, fileName: string) => {
+          (fieldName: string, stream: Readable, fileInfo: Busboy.FileInfo) => {
+            const { filename } = fileInfo;
             this.logger.debug('Encountered HTTP POST file stream');
             const result: FormFile = {
               fieldName,
-              fileName,
+              filename,
               stream,
             };
 
