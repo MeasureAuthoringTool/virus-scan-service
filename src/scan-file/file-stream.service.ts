@@ -10,7 +10,6 @@ import * as Busboy from 'busboy';
 import { Readable } from 'stream';
 import { ScanFileConfig } from './scan-file.config';
 import http from 'http';
-import { FileInfo } from 'busboy';
 
 type BusboyHeaders = { 'content-type': string } & http.IncomingHttpHeaders;
 
@@ -55,7 +54,7 @@ export class FileStreamService {
       (subscriber: Subscriber<FormFile>) => {
         busboy.on(
           'file',
-          (fieldName: string, stream: Readable, fileInfo: FileInfo) => {
+          (fieldName: string, stream: Readable, fileInfo: Busboy.FileInfo) => {
             const { filename } = fileInfo;
             this.logger.debug('Encountered HTTP POST file stream');
             const result: FormFile = {
