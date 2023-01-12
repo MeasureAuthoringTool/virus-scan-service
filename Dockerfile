@@ -1,4 +1,4 @@
-FROM node:gallium-bullseye
+FROM node:lts-bullseye-slim
 
 # Default values for clamav
 ENV CLAMAV_HOST=clamav
