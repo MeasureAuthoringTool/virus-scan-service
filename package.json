@@ -39,7 +39,7 @@
     "passport-headerapikey": "^1.2.2",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.4.0",
-    "swagger-ui-express": "^4.2.0",
+    "swagger-ui-express": "^4.6.0",
     "winston": "^3.3.3"
   },
   "devDependencies": {
