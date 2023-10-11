@@ -2,6 +2,16 @@
 
 ## Description
 This is a virus scanning microservice based on the on [NestJS](https://github.com/nestjs/nest) framework.
+## Pre-requisite
+### ClamAv installation
+
+https://www.jdeen.com/blog/install-configure-clamav-macos-linux-free-antivirus-solution
+
+```brew install clamav```
+```sudo brew services start clamav```
+
+### Docker
+```docker compose up```
 
 ## Installation
 
