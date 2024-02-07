@@ -65,7 +65,7 @@
     "jest-sinon": "^1.1.0",
     "mock-req-res": "^1.2.0",
     "prettier": "^2.5.0",
-    "rimraf": "^3.0.2",
+    "rimraf": "^5.0.5",
     "sinon": "^14.0.0",
     "supertest": "^6.1.6",
     "swagger-ui-express": "^4.2.0",
