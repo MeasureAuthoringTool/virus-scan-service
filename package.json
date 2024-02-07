@@ -68,7 +68,7 @@
     "rimraf": "^3.0.2",
     "sinon": "^14.0.0",
     "supertest": "^6.1.6",
-    "swagger-ui-express": "^4.2.0",
+    "swagger-ui-express": "^5.0.0",
     "ts-jest": "^29.1.1",
     "ts-loader": "^9.2.6",
     "ts-node": "^10.4.0",
