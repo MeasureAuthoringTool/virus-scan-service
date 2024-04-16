@@ -39,7 +39,7 @@
     "passport-headerapikey": "^1.2.2",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.4.0",
-    "winston": "^3.3.3"
+    "winston": "^3.13.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.2.1",
