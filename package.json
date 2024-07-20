@@ -64,7 +64,7 @@
     "jest-extended": "^4.0.2",
     "jest-sinon": "^1.1.0",
     "mock-req-res": "^1.2.0",
-    "prettier": "^2.5.0",
+    "prettier": "^3.3.3",
     "rimraf": "^3.0.2",
     "sinon": "^14.0.0",
     "supertest": "^6.1.6",
