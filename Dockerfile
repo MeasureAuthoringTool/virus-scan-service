@@ -14,7 +14,7 @@ RUN apt update \
 
 # Install app dependencies
 COPY ["package.json", "package-lock.json*", "./"]
-RUN npm ci --only=production
+RUN npm install newrelic && npm ci --only=production
 
 # Bundle our app resources
 COPY ./dist .
