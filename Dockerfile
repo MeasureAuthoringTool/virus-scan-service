@@ -1,4 +1,4 @@
-FROM node:lts-bullseye-slim
+FROM node:22-bookworm-slim
 
 # Default values for clamav
 ENV CLAMAV_HOST=clamav
