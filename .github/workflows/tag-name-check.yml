@@ -1,0 +1,23 @@
+# This workflow will verify the tag names on tag push to enforce tag names to match:
+# sprint/<sprint name>_<MADiE release version number>_<date-of-tag>_<hotfix number(if its a hotfix tag)>
+
+name: Enforce Tag Names
+
+on: 
+    push:
+        tags:
+            - '*'
+
+jobs:
+    check_tag_name:
+        runs-on: ubuntu-latest
+
+        steps:
+        - name: Check tag name
+          run: |
+            TAG_NAME=$(echo $GITHUB_REF | sed 's/refs\/tags\///')
+            if [[ ! $TAG_NAME =~ /^sprint\/[a-zA-Z]+_\d+\.\d+\.\d+_\d{4}-\d{2}-\d{2}(_\d+)?$ ]]; then
+                echo "Error: Tag '$TAG_NAME' does not match the required naming convention."
+                exit 1
+            fi
+            echo "Tag '$TAG_NAME' is valid."
