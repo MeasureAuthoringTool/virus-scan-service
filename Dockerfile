@@ -7,9 +7,7 @@ ENV CLAMAV_TIMEOUT=120
 
 WORKDIR /usr/src/app
 
-RUN apt update \
-    && apt install wget -y \
-    && wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh \
+RUN wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh \
     && chmod +x wait-for-it.sh
 
 # Install app dependencies
