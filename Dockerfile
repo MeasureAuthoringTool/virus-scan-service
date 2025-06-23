@@ -1,4 +1,4 @@
-FROM node:22-bookworm-slim
+FROM node:22-alpine
 
 # Default values for clamav
 ENV CLAMAV_HOST=clamav
