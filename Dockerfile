@@ -1,4 +1,4 @@
-FROM node:22
+FROM node:22-alpine
 
 # Default values for clamav
 ENV CLAMAV_HOST=clamav
@@ -18,4 +18,4 @@ RUN npm install newrelic && npm ci --only=production
 COPY ./dist .
 
 EXPOSE 5000
-ENTRYPOINT ["sh", "-c", "./wait-for-it.sh ${CLAMAV_HOST}:${CLAMAV_PORT} --strict --timeout=${CLAMAV_TIMEOUT} -- node --require dd-trace/init src/main"]
+ENTRYPOINT ["sh", "-c", "./wait-for-it.sh ${CLAMAV_HOST}:${CLAMAV_PORT} --strict --timeout=${CLAMAV_TIMEOUT} -- node src/main"]
