@@ -1,4 +1,4 @@
-FROM node:22-alpine
+FROM node:22
 
 # Default values for clamav
 ENV CLAMAV_HOST=clamav
@@ -12,7 +12,7 @@ RUN wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for
 
 # Install app dependencies
 COPY ["package.json", "package-lock.json*", "./"]
-RUN npm install newrelic && npm ci --only=production
+RUN npm ci --only=production
 
 # Bundle our app resources
 COPY ./dist .
