@@ -40,7 +40,8 @@
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.4.0",
     "virus-scan-service": "file:",
-    "winston": "^3.3.3"
+    "winston": "^3.3.3",
+    "dd-trace": "^5.x.x"
   },
   "devDependencies": {
     "@nestjs/cli": "^11.0.10",
