@@ -1,14 +1,24 @@
+import 'reflect-metadata';
 import { GlobalModule } from './global.module';
 import { ConfigModule } from '@nestjs/config';
 import { Logger } from '@nestjs/common';
 import { AppConfigService } from './config/config.service';
 
 describe('GlobalModule', () => {
-  it('should have the specified imports', () => {
-    const imports = Reflect.getMetadata('imports', GlobalModule);
-    expect(imports).toBeArrayOfSize(1);
-    expect(imports[0].global).toBeTrue();
-    expect(imports[0].module).toBe(ConfigModule);
+  it('should have the specified imports', async () => {
+    const imports = Reflect.getMetadata('imports', GlobalModule) as unknown[]; //promise?
+    expect(Array.isArray(imports)).toBe(true);
+    expect(imports).toHaveLength(1);
+
+    // imports[0] is a promise now?
+    const first = imports[0] as any;
+    const resolved = typeof first?.then === 'function' ? await first : first;
+    expect(resolved).toEqual(
+      expect.objectContaining({
+        module: ConfigModule,
+        global: true,
+      }),
+    );
   });
 
   it('should have the specified controllers', () => {
