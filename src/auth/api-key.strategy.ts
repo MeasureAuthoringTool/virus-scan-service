@@ -4,8 +4,6 @@ import { Inject, Injectable } from '@nestjs/common';
 import { API_KEY_GUARD } from '../constants';
 import { AppConfigService } from '../config/config.service';
 
-type VerifiedType = (err: Error | null, user?: any, info?: any) => void;
-
 @Injectable()
 export class ApiKeyStrategy extends PassportStrategy(
   HeaderAPIKeyStrategy,
@@ -14,15 +12,13 @@ export class ApiKeyStrategy extends PassportStrategy(
   constructor(
     @Inject(AppConfigService) private configService: AppConfigService,
   ) {
-    super(
-      { header: 'apikey', prefix: '' },
-      false,
-      (apiKey: string, verified: VerifiedType) => {
-        if (apiKey === configService.apiKey) {
-          return verified(null, true, 'Valid API Key');
-        }
-        return verified(null, false, 'Invalid API Key');
-      },
-    );
+    super({ header: 'apikey', prefix: '' }, false);
+  }
+
+  validate(apiKey: string): [boolean | null, string] {
+    if (apiKey === this.configService.apiKey) {
+      return [true, 'Valid API Key'];
+    }
+    return [null, 'Invalid API Key'];
   }
 }

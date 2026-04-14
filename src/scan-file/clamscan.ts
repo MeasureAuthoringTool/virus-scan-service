@@ -4,5 +4,6 @@
  * This just allows everything using clamscan to use the regular
  * import clamscan from 'clamscan' format
  */
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 import clamscan = require('clamscan');
 export default clamscan;

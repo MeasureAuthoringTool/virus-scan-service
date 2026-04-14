@@ -2,8 +2,10 @@ import { Logger, ServiceUnavailableException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import {
+  DiskHealthIndicator,
   HealthCheckResult,
   HealthIndicatorResult,
+  MemoryHealthIndicator,
   TerminusModule,
 } from '@nestjs/terminus';
 import { HttpModule } from '@nestjs/axios';
@@ -63,6 +65,15 @@ describe('HealthCheckController', () => {
       this: Promise<ScanFileService>,
     ) {
       return this;
+    });
+    stub(DiskHealthIndicator.prototype, 'checkStorage').resolves({
+      'disk-storage': { status: 'up' },
+    });
+    stub(MemoryHealthIndicator.prototype, 'checkHeap').resolves({
+      'memory-heap': { status: 'up' },
+    });
+    stub(MemoryHealthIndicator.prototype, 'checkRSS').resolves({
+      'memory-rss': { status: 'up' },
     });
     getVersionStub = stub(VersionNumberService.prototype, 'getVersion').returns(
       versionResult,
