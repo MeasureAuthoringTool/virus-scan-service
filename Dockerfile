@@ -1,5 +1,7 @@
 FROM node:22-alpine
 
+RUN apk add --no-cache bash
+
 # Default values for clamav
 ENV CLAMAV_HOST=clamav
 ENV CLAMAV_PORT=3310

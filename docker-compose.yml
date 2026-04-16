@@ -5,6 +5,8 @@ services:
     ports:
       - "127.0.0.1:3310:3310"
     hostname: "clamav"
+    networks:
+      - virus-scan-network
   virus-scan-service:
     build: .
     image: "measureauthoringtool/virus-scan-service${VIRUS_SCAN_TAG}"
@@ -26,3 +28,8 @@ services:
 
     depends_on:
       - clamav
+    networks:
+      - virus-scan-network
+
+networks:
+  virus-scan-network:

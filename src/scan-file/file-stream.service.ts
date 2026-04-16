@@ -6,7 +6,7 @@ import {
   PayloadTooLargeException,
 } from '@nestjs/common';
 import { Observable, Subscriber } from 'rxjs';
-import * as Busboy from 'busboy';
+import Busboy from 'busboy';
 import { Readable } from 'stream';
 import { ScanFileConfig } from './scan-file.config';
 import http from 'http';
