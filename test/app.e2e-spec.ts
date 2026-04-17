@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import * as request from 'supertest';
+import request from 'supertest';
 import { Buffer } from 'buffer';
 import { AppModule } from '../src/app.module';
 import { version } from '../package.json';
@@ -64,7 +64,7 @@ describe('AppController (e2e)', () => {
           {
             fileName: 'eicar.txt',
             infected: true,
-            viruses: ['Win.Test.EICAR_HDB-1'],
+            viruses: ['Eicar-Test-Signature'],
           },
         ],
         filesScanned: 1,
