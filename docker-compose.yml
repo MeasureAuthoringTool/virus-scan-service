@@ -1,11 +1,14 @@
-version: "3.9"
 services:
   clamav:
     image: "clamav/clamav:stable"
+    platform: linux/amd64
     ports:
       - "127.0.0.1:3310:3310"
     hostname: "clamav"
+    networks:
+      - virus-scan-network
   virus-scan-service:
+    build: .
     image: "measureauthoringtool/virus-scan-service${VIRUS_SCAN_TAG}"
     ports:
       - "127.0.0.1:5000:5000"
@@ -25,3 +28,8 @@ services:
 
     depends_on:
       - clamav
+    networks:
+      - virus-scan-network
+
+networks:
+  virus-scan-network:
