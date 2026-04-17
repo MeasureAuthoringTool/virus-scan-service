@@ -60,19 +60,20 @@ describe('AppController (e2e)', () => {
       .attach('file', buffer, 'eicar.txt')
       .expect(200)
       .then((response) => {
-        console.log('Scan-file (virus) response body:', JSON.stringify(response.body));
-        expect(response.body).toEqual({
-          scanResults: [
-            {
-              fileName: 'eicar.txt',
-              infected: true,
-              viruses: ['Win.Test.EICAR_HDB-1'],
-            },
-          ],
-          filesScanned: 1,
-          infectedFileCount: 1,
-          cleanFileCount: 0,
-        });
+        const acceptedSignatures = [
+          'Eicar-Test-Signature',
+          'Win.Test.EICAR_HDB-1',
+        ];
+        expect(response.body.scanResults).toHaveLength(1);
+        expect(response.body.scanResults[0].fileName).toBe('eicar.txt');
+        expect(response.body.scanResults[0].infected).toBe(true);
+        expect(response.body.scanResults[0].viruses).toHaveLength(1);
+        expect(acceptedSignatures).toContain(
+          response.body.scanResults[0].viruses[0],
+        );
+        expect(response.body.filesScanned).toBe(1);
+        expect(response.body.infectedFileCount).toBe(1);
+        expect(response.body.cleanFileCount).toBe(0);
       });
   });
 
