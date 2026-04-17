@@ -66,7 +66,7 @@ describe('AppController (e2e)', () => {
             {
               fileName: 'eicar.txt',
               infected: true,
-              viruses: ['Eicar-Test-Signature'],
+              viruses: ['Win.Test.EICAR_HDB-1'],
             },
           ],
           filesScanned: 1,
