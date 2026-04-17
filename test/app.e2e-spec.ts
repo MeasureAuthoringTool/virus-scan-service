@@ -59,17 +59,20 @@ describe('AppController (e2e)', () => {
       .set('apikey', '1234567')
       .attach('file', buffer, 'eicar.txt')
       .expect(200)
-      .expect({
-        scanResults: [
-          {
-            fileName: 'eicar.txt',
-            infected: true,
-            viruses: ['Eicar-Test-Signature'],
-          },
-        ],
-        filesScanned: 1,
-        infectedFileCount: 1,
-        cleanFileCount: 0,
+      .then((response) => {
+        console.log('Scan-file (virus) response body:', JSON.stringify(response.body));
+        expect(response.body).toEqual({
+          scanResults: [
+            {
+              fileName: 'eicar.txt',
+              infected: true,
+              viruses: ['Eicar-Test-Signature'],
+            },
+          ],
+          filesScanned: 1,
+          infectedFileCount: 1,
+          cleanFileCount: 0,
+        });
       });
   });
 
