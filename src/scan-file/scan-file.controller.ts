@@ -60,7 +60,8 @@ export class ScanFileController {
   })
   @ApiConsumes('multipart/form-data')
   @ApiBody({
-    description: 'The file to be scanned',
+    description:
+      'One or more files to be scanned (up to MAX_FILE_COUNT per request)',
     type: FileUploadDto,
   })
   @Post()
