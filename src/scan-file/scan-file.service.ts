@@ -62,13 +62,12 @@ export class ScanFileService {
     stream: Readable,
     fileName: string,
   ): Promise<ScanResultDto> {
-    // TESTING Only: Create a fresh connection per scan to avoid concurrent socket
-    // interleaving (mergeMap sends multiple files in parallel), which causes
-    // "UNKNOWN COMMAND" errors from ClamAV.
-    const clamscan = await this.initializeClamAV();
+    if (!this.clamscan) {
+      this.clamscan = await this.initializeClamAV();
+    }
     this.logger.log(`Scanning file ${fileName}`);
     try {
-      const result = await clamscan.scanStream(stream);
+      const result = await this.clamscan.scanStream(stream);
       if (result.isInfected) {
         const virusString = result.viruses.join('", "');
         this.logger.warn(
@@ -77,7 +76,7 @@ export class ScanFileService {
       }
       return new ScanResultDto(fileName, result.isInfected, result.viruses);
     } catch (error) {
-      const message = 'An error occurred while scanning file';
+      const message = `An error occurred while scanning file ${fileName}`;
       this.logger.error(message, error);
       throw new ClamException(message);
     }
